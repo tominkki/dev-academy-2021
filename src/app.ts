@@ -1,10 +1,9 @@
 import express from 'express';
 import getNames from './services/name-service';
 
-const app = express();
-app.use(express.json());
+const router = express.Router();
 
-app.get('/names', async (req, res) => {
+router.get('/names', async (req, res) => {
   const args = req.query;
   const nameList = await getNames();
 
@@ -37,4 +36,4 @@ app.get('/names', async (req, res) => {
   return res.status(400).send('400 Bad Request');
 });
 
-export default app;
+export default router;

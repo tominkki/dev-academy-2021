@@ -1,9 +1,24 @@
 import http from 'http';
-import app from './app';
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import typeDefs from './graphql/type-defs';
+import resolvers from './graphql/resolvers';
+import router from './app';
 import { PORT } from './utils/config';
 
-const server = http.createServer(app);
+const app = express();
+app.use(express.json());
+app.use('/api', router);
 
-server.listen(PORT, () => {
-  console.log(`Server listening to port ${PORT}`);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers
+});
+
+server.applyMiddleware({ app, path: '/api/graphql' });
+const httpServer = http.createServer(app);
+
+httpServer.listen(PORT, () => {
+  console.log(`Server ready at localhost:${PORT}/api`);
+  console.log(`GraphQl server ready at localhost:${PORT}${server.graphqlPath}`);
 });
