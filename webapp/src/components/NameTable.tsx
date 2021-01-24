@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, Dispatch, SetStateAction } from 'react';
 import { useTable, useSortBy, Column } from 'react-table';
 import {
-  Flex, Box, FormHelperText, Input, InputRightElement, FormControl, Button, Table, Thead, Tbody, Tr, Th, Td, chakra
+  Flex, Box, FormHelperText, Input, InputRightElement, FormControl, Button, Table, Thead, Tfoot, Tbody, Tr, Th, Td, chakra
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon, ArrowUpIcon, ArrowDownIcon } from '@chakra-ui/icons';
 import nameService from '../services/name-service';
@@ -58,6 +58,8 @@ const NameTable: React.FC = () => {
     { columns, data: tableData }, useSortBy
   );
 
+  const total = (): number => names.reduce((acc, name) => acc + name.amount, 0);
+
   return (
     <Flex width='100%' justify='center' mt='2.5rem'>
       <Box maxW='3xl' borderWidth='2px' borderRadius='lg' boxShadow='base' padding='0.75rem' width='100%'>
@@ -95,6 +97,16 @@ const NameTable: React.FC = () => {
               );
             })}
           </Tbody>
+          <Tfoot>
+            <Tr>
+              <Th>
+                Total amount of names
+              </Th>
+              <Th>
+                {total()}
+              </Th>
+            </Tr>
+          </Tfoot>
         </Table>
       </Box>
     </Flex>
